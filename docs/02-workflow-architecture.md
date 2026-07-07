@@ -79,20 +79,40 @@ the Analyst's job, and orchestration is plain pipeline logic, not a character.
 A pipeline this short needs no separate orchestrator persona — the runner just invokes
 the four in order, validating each handoff against [`/schemas`](../schemas).
 
-### Runtime note — who sees the images
-Only the **Analyst** needs vision. When photos are pasted into a chat session, they're
+### Runtime note — who sees the images (and is that enough?)
+Only the **Analyst** needs vision. When photos are **pasted into a chat**, they're
 visible only to the **orchestrating (main) agent's context**, not to freshly spawned
-subagents (which receive text prompts). So at runtime:
-- The **Analyst** step runs in whichever context can actually see the images — normally
-  the orchestrator itself. (If the images exist as files on disk, the Analyst *may* run
-  as a subagent that `Read`s those paths.)
-- The **Stylist**, **Skeptic**, and **Editor** are text-only and can run as independent
-  subagents — worth doing for the Skeptic especially, so its critique isn't anchored to
-  the Stylist's reasoning. Each reads its persona brief + the principle library and
-  receives the upstream JSON.
+subagents (which receive text prompts). When photos exist as **files on disk**, any
+subagent can see them via `Read`. This split matters, so the runner branches:
 
-### Safety & scope (pre-flight, enforced by the Analyst)
-- **Adults only** — decline if the subject appears to be a minor.
+- **Images as files → distribute vision.** Run the **Analyst as a subagent** on the file
+  paths; the Editor may also re-`Read` them for a final check. No bottleneck.
+- **Images pasted only → the orchestrator is the sole set of eyes.** This is the weaker
+  case, so it's hardened rather than left naive (below).
+
+**Is single-vision effective?** The four personas are distinct *reasoning* modes
+(describe → prescribe → critique → present), and there is only ever **one** set of photos
+— so a single careful perceiver is not itself the problem. The real risks are (a) an
+unchecked visual estimate propagating downstream, and (b) text-only agents losing nuance
+the JSON didn't carry. Three mechanisms address both:
+
+1. **Verified single pass.** The Analyst measures, then runs a second pass that actively
+   tries to *disagree* with the first (re-anchor the head unit, re-check the leg break,
+   cross-method torso:leg and shoulder:hip). Conflict lowers confidence instead of being
+   averaged away — an adversarial check where independent agents aren't possible.
+2. **Rich serialization.** The `StyleProfile` carries a free-text `visual_notes` field so
+   the Stylist and Skeptic get grounding (posture, features to feature, current outfit
+   read), not just ratios.
+3. **Final visual reality-check.** Because the orchestrator still holds the images while
+   composing the Editor step, it re-looks at the photos and confirms the recommendations
+   don't contradict what's plainly visible — the one agent with eyes validates the end
+   result. This turns the constraint into a closing safeguard.
+
+The **Stylist**, **Skeptic**, and **Editor** remain text-only and run as independent
+subagents (worth it for the Skeptic especially, so its critique isn't anchored to the
+Stylist's reasoning). Each reads its brief + the principle library and the upstream JSON.
+
+### Scope & sanity (pre-flight, enforced by the Analyst)
 - **Same-person check** — confirm the 3 photos show the same person; else ask.
 - **Usable photos** — need ≥1 full-body frame; if not, ask for a better shot instead of
   guessing.

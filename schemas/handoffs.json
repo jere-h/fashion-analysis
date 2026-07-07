@@ -18,6 +18,7 @@
       "type": "object",
       "required": ["intake", "proportions", "shape", "color"],
       "properties": {
+        "visual_notes": { "type": "string" },
         "intake": {
           "type": "object",
           "required": ["photos", "basis", "coverage", "limitations", "confidence_ceiling"],

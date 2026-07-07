@@ -19,26 +19,34 @@ Handoff schemas: [`schemas/handoffs.md`](../../../schemas/handoffs.md).
   Never required.
 
 ## Step 0 — Pre-flight (do this first, always)
-Run the Analyst's safety pre-flight before any analysis:
+Run the Analyst's pre-flight before any analysis:
 1. **Count & source the photos.** If fewer than ~2–3 usable photos are available, ask
-   for more (ideally full-body front + side) and stop.
-2. **Adults only.** If the subject appears to be a minor, decline politely and stop.
-3. **Same person?** If the photos clearly show different people, ask which to analyze.
-4. **Usable?** Need ≥1 full-body frame for proportions. If everything is cropped/blurry,
+   for more (ideally full-body front + side) and stop. Note whether the photos are
+   **files on disk** (you have paths) or **pasted into the chat** (only you can see them)
+   — this decides how Step 1 runs.
+2. **Same person?** If the photos clearly show different people, ask which to analyze.
+3. **Usable?** Need ≥1 full-body frame for proportions. If everything is cropped/blurry,
    say what's missing and ask — don't guess.
 Keep everything body-neutral. Treat images as ephemeral.
 
-## Step 1 — The Analyst  (you run this; it needs vision)
-Adopt [`personas/1-analyst.md`](../../../personas/1-analyst.md). **You** perform this
-step directly, because pasted images are visible only to your (the orchestrator's)
-context — a spawned subagent would not see them. (Exception: if the photos are files on
-disk, you *may* spawn an Analyst subagent that `Read`s those paths.)
+## Step 1 — The Analyst  (the only step that needs vision)
+Adopt [`personas/1-analyst.md`](../../../personas/1-analyst.md). Choose by how the images
+arrived:
+- **Files on disk →** spawn an **Analyst subagent** and give it the file paths; it
+  `Read`s the images itself. Vision isn't bottlenecked.
+- **Pasted into chat →** **you** run this step, because a spawned subagent can't see
+  in-context images. You are the sole set of eyes, so harden the single pass:
+  **measure, then run a second pass that tries to disagree** with the first (re-anchor
+  the head unit, re-check the leg break, cross-method torso:leg and shoulder:hip);
+  conflict *lowers* confidence rather than being averaged away.
 
-Look at the images and emit a **`StyleProfile`** JSON per the schema: photo triage +
-confidence ceiling, vertical & horizontal proportions (in head-height units), body-shape
-read (primary + nearest neighbor + plain description), and a **low-confidence**,
-lighting-caveated color read. Every leaf gets `{value, confidence, basis}`. Mark
-anything unreadable `unavailable` — do not guess.
+Emit a **`StyleProfile`** JSON per the schema: photo triage + confidence ceiling,
+vertical & horizontal proportions (head-height units), body-shape read (primary +
+nearest neighbor + plain description), a **low-confidence** lighting-caveated color read,
+and a free-text **`visual_notes`** capturing what the ratios can't hold (posture,
+features worth featuring, current outfit read) — this is what grounds the text-only
+agents downstream. Every leaf gets `{value, confidence, basis}`; mark anything unreadable
+`unavailable` — do not guess.
 
 ## Step 2 — Stylist + Skeptic  (spawn as independent subagents, in parallel)
 Spawn two subagents in a single message so they run concurrently. Give each the
@@ -65,6 +73,11 @@ breakdown in the exact structure of [`docs/03-output-template.md`](../../../docs
 
 > 🎯 one-liner · 📐 what the photos show (facts, lightly held) · ✨ play with these
 > (3–5) · 🔧 styles to tweak not copy (1–3) · 🧭 pocket principles (2–3) · 💬 warm close
+
+**Final visual reality-check (you still hold the images).** Before finalizing, re-look at
+the photos and confirm the recommendations don't contradict anything plainly visible — if
+the Stylist leaned on a proportion your eyes now doubt, soften it. You are the only agent
+with eyes; this is the last chance to catch a bad read before it reaches the user.
 
 Honesty pass: drop/hedge anything marked `low` (color stays "a hunch to test in
 daylight"); strip any "flaw/hide/problem/slimming-as-duty" language; keep it ~250–400

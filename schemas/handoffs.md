@@ -37,6 +37,8 @@ The Analyst folds photo-triage, proportions, body shape, and color into one obje
     "confidence_ceiling": "high|medium|low"
   },
 
+  "visual_notes": "Free text: posture, features worth featuring, what they're currently wearing and how it reads — grounds the text-only agents in what the ratios can't hold.",
+
   "proportions": {
     "vertical": {
       "height_in_heads":  { "value": 7.5, "confidence": "medium", "basis": "p1" },
