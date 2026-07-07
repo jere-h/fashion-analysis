@@ -58,9 +58,10 @@ handoff) — not a separate agent.
 ## How to run it
 
 **In a Claude Code session (easiest):**
-1. Upload / paste **3 photos** of the same person (best: full-body front, side, and a
-   back/¾ or clear face shot). Add optional context in your message — goals, occasions,
-   likes, or "skip the gendered labels."
+1. Provide **3 photos** of the same person (best: full-body front, side, and a back/¾ or
+   clear face shot) — drop them in [`images/`](images/) (git-ignored) to use the stronger
+   file-based vision path, or paste them into chat. Add optional context in your message —
+   goals, occasions, likes, or "skip the gendered labels."
 2. Invoke the **`style-analysis`** skill (e.g. `/style-analysis`), or just say
    *"run the style analysis on these."*
 3. The orchestrator runs the pre-flight, does the Analyst read on your photos, spawns the
@@ -70,6 +71,14 @@ handoff) — not a separate agent.
 + context go to the Analyst → `StyleProfile` → Stylist & Skeptic (independent) →
 `Recommendations` + `TrendNotes` → Editor → the final breakdown. Each handoff is validated
 against `schemas/`. See [`.claude/skills/style-analysis/SKILL.md`](.claude/skills/style-analysis/SKILL.md).
+
+> 🔒 **Privacy — local-only images.** Your photos are handled **locally only**: never
+> uploaded, transmitted to third-party services, stored remotely, embedded in artifacts,
+> or committed to git (photo files and `images/` are `.gitignore`d as a backstop). Treat
+> them as ephemeral. *Honest caveat:* running this through Claude Code / the Claude API
+> sends the image to the Claude model endpoint for the vision step — the model seeing it,
+> as with any model use; the workflow adds no further upload or storage. Zero transmission
+> would require a fully local vision model.
 
 > ⚠️ **Scope & disclaimer.** This is entertainment, not professional image
 > consulting, medical, or fitness advice. It reasons about *clothes and proportion*,

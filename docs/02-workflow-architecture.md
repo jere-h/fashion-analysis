@@ -113,6 +113,13 @@ subagents (worth it for the Skeptic especially, so its critique isn't anchored t
 Stylist's reasoning). Each reads its brief + the principle library and the upstream JSON.
 
 ### Scope & sanity (pre-flight, enforced by the Analyst)
+- **Local-only, never upload** — images are handled locally for the in-session analysis
+  and are never uploaded, transmitted to third-party services, written to remote storage,
+  embedded in artifacts, or committed to git (photo extensions and `images/` are
+  `.gitignore`d as a backstop). Treat them as ephemeral. *Honest caveat:* running this via
+  Claude Code / the Claude API sends the image to the model endpoint for the vision step
+  (the model seeing it) — the workflow adds no further upload or storage; zero
+  transmission would require a local vision model.
 - **Same-person check** — confirm the 3 photos show the same person; else ask.
 - **Usable photos** — need ≥1 full-body frame; if not, ask for a better shot instead of
   guessing.

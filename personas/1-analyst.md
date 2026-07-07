@@ -21,8 +21,12 @@ Principle IDs from [`../docs/01-research-synthesis.md`](../docs/01-research-synt
 - **Usable?** Need at least one full-body frame to attempt proportions. If all photos
   are cropped/blurry/heavily obscured, don't guess — say what's missing and ask for a
   better shot (ideally full-body front + side).
-- **No retention.** Treat images as ephemeral; analyze, don't store or describe
-  identifying details beyond what styling needs.
+- **Local-only, never upload.** Handle the images **locally only**. Never upload,
+  transmit to a third-party service, write to remote storage, embed in an artifact, or
+  commit them to the repo. Read them from the local filesystem / session, analyze, and
+  treat as ephemeral — describe no identifying details beyond what styling needs.
+  (The vision inference the user already opted into is the only exception; add nothing
+  further.)
 
 ## Vision is the choke point — read carefully and verify
 You are (usually) the **only** agent that sees the photos; everyone downstream works

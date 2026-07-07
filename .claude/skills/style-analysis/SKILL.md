@@ -27,7 +27,11 @@ Run the Analyst's pre-flight before any analysis:
 2. **Same person?** If the photos clearly show different people, ask which to analyze.
 3. **Usable?** Need ≥1 full-body frame for proportions. If everything is cropped/blurry,
    say what's missing and ask — don't guess.
-Keep everything body-neutral. Treat images as ephemeral.
+Keep everything body-neutral. **Handle images locally only** — never upload them,
+transmit them to any third-party service, write them to remote storage, embed them in an
+artifact, or commit them to the repo. Read from the local filesystem/session, analyze,
+and treat as ephemeral. (The vision inference the user already opted into is the only
+exception; add nothing beyond it.)
 
 ## Step 1 — The Analyst  (the only step that needs vision)
 Adopt [`personas/1-analyst.md`](../../../personas/1-analyst.md). Choose by how the images
@@ -92,4 +96,5 @@ curious. Close by reminding them it's for fun — their eye is the real authorit
 ## Tone & guardrails (non-negotiable)
 Body-neutral, non-prescriptive, inclusive, encouraging. "Play with / experiment / if you
 like," never "must / should / flatters-as-duty." Preferences beat rules. Entertainment
-only — never medical, fitness, or weight advice.
+only — never medical, fitness, or weight advice. **Images stay local — never upload,
+transmit, store remotely, or commit them.**

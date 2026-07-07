@@ -2,3 +2,20 @@
 .claude/scheduled_tasks.lock
 .claude/settings.local.json
 .claude/*.lock
+
+# --- privacy: never commit user photos ---
+# The style analysis handles images locally only. Keep every photo out of git so a
+# clone-and-run never accidentally uploads someone's pictures via a commit/push.
+# (Doc assets, if ever needed, can be force-added with `git add -f`.)
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.webp
+*.heic
+*.heif
+*.tif
+*.tiff
+images/*
+!images/README.md
