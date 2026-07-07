@@ -1,0 +1,66 @@
+# 👗 3-Photo Style Analysis — an agentic workflow
+
+A design for a **casual, for-fun** style analysis: give it **3 photos of the same
+person**, and a small team of specialized AI "personas" reads proportions, body
+shape, and coloring, then hands back a short, warm breakdown — *"try these styles,
+lean into these principles, and here's how to tweak that trend so it actually fits
+you."*
+
+It is **food for thought, not a verdict.** No "flaws," no rules you must obey — just
+grounded ideas to play with. Your eye is always the real authority.
+
+---
+
+## What's in this repo
+
+| Path | What it is |
+|------|-----------|
+| [`docs/01-research-synthesis.md`](docs/01-research-synthesis.md) | The grounding: synthesized research on proportion assessment, body-shape systems, styling principles, and color analysis — with a numbered **principle library** every recommendation traces back to. |
+| [`docs/02-workflow-architecture.md`](docs/02-workflow-architecture.md) | The pipeline: the four agents, data-flow graph, orchestration contract, and guardrails. |
+| [`docs/03-output-template.md`](docs/03-output-template.md) | The final breakdown format the user actually reads, with a worked example. |
+| [`personas/`](personas) | One ready-to-use brief per agent (1–4): role, method, output contract, guardrails. |
+| [`schemas/`](schemas) | Structured handoff contracts between agents ([`.md`](schemas/handoffs.md) + [`.json`](schemas/handoffs.json)). |
+
+## How it works, in one picture
+
+```
+3 photos ─▶ 1. Analyst ─▶ 2. Stylist ─┐
+                        └▶ 3. Skeptic ─┴▶ 4. Editor ─▶ 📋 Breakdown
+```
+
+Four personas — one clear mode of work each: **read → recommend → critique → present.**
+
+1. **The Analyst** — reads the 3 photos: proportions, body-shape read, and directional
+   color, all confidence-tagged. (This one persona does all the *describing*.)
+2. **The Stylist** — turns the facts into styling goals **and** concrete moves (rise,
+   necklines, hemlines, fit map, outfits to try), each citing a principle.
+3. **The Skeptic** — "don't blindly follow that trend — here's the tweak," plus busts
+   the tired rules.
+4. **The Editor** — the short, warm, prioritized final read.
+
+Orchestration is plain pipeline logic (invoke the four in order, validate each
+handoff) — not a separate agent.
+
+## Design principles
+
+- **Describe, then prescribe.** The Analyst states facts; the Stylist makes choices;
+  the Editor curates. Separating the two is what keeps advice specific instead of
+  generic.
+- **Everything is grounded.** Each recommendation cites a principle ID from the
+  research synthesis — no vibes-only styling.
+- **Confidence is honest.** A handful of photos ≠ a tailor's tape. Every claim carries
+  a confidence level; low-confidence guesses get hedged or dropped, never laundered
+  into facts. Color especially is "a hunch to test in daylight."
+- **Body-neutral and inclusive.** Works across genders and body types; no "problem
+  areas," no flattery-as-obligation. Stated preferences always beat the rulebook.
+
+## How to run it (conceptually)
+
+The personas and schemas are model-agnostic prompt units. To execute:
+feed the 3 photos + optional context to the Analyst, then pass its `StyleProfile` to
+the Stylist and Skeptic, validating each structured handoff against `schemas/`, and
+pass all three outputs to the Editor for the final breakdown.
+
+> ⚠️ **Scope & disclaimer.** This is entertainment, not professional image
+> consulting, medical, or fitness advice. It reasons about *clothes and proportion*,
+> never about a person's worth, weight, or health.

@@ -1,0 +1,169 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Style-analysis inter-agent handoff schemas",
+  "description": "Machine-readable contracts for each producing persona's output. Prose companion: handoffs.md. Four agents; the Editor produces final prose, not a schema.",
+  "definitions": {
+    "Claim": {
+      "type": "object",
+      "required": ["value", "confidence"],
+      "properties": {
+        "value": {},
+        "confidence": { "enum": ["high", "medium", "low"] },
+        "basis": { "type": "string" }
+      }
+    },
+    "Coverage": { "enum": ["well-supported", "partial", "unavailable"] },
+
+    "StyleProfile": {
+      "type": "object",
+      "required": ["intake", "proportions", "shape", "color"],
+      "properties": {
+        "intake": {
+          "type": "object",
+          "required": ["photos", "basis", "coverage", "limitations", "confidence_ceiling"],
+          "properties": {
+            "photos": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["id", "view", "framing", "pose", "usability"],
+                "properties": {
+                  "id": { "type": "string" },
+                  "view": { "enum": ["front", "side", "back", "three-quarter", "face"] },
+                  "framing": { "enum": ["full-body", "cropped"] },
+                  "pose": { "enum": ["neutral", "angled", "seated"] },
+                  "usability": { "enum": ["good", "fair", "poor"] }
+                }
+              }
+            },
+            "basis": {
+              "type": "object",
+              "required": ["unit", "anchor_photo_id", "reliable"],
+              "properties": {
+                "unit": { "const": "head-height" },
+                "anchor_photo_id": { "type": "string" },
+                "reliable": { "type": "boolean" }
+              }
+            },
+            "coverage": {
+              "type": "object",
+              "required": ["proportions", "horizontal_balance", "posture", "color"],
+              "properties": {
+                "proportions": { "$ref": "#/definitions/Coverage" },
+                "horizontal_balance": { "$ref": "#/definitions/Coverage" },
+                "posture": { "$ref": "#/definitions/Coverage" },
+                "color": { "$ref": "#/definitions/Coverage" }
+              }
+            },
+            "limitations": { "type": "array", "items": { "type": "string" } },
+            "confidence_ceiling": { "enum": ["high", "medium", "low"] }
+          }
+        },
+        "proportions": {
+          "type": "object",
+          "required": ["vertical", "horizontal"],
+          "properties": {
+            "vertical": {
+              "type": "object",
+              "properties": {
+                "height_in_heads": { "$ref": "#/definitions/Claim" },
+                "torso_leg": { "$ref": "#/definitions/Claim" },
+                "waist_placement": { "$ref": "#/definitions/Claim" },
+                "neck": { "$ref": "#/definitions/Claim" },
+                "limb_length": { "$ref": "#/definitions/Claim" }
+              }
+            },
+            "horizontal": {
+              "type": "object",
+              "properties": {
+                "shoulder_waist_hip": { "$ref": "#/definitions/Claim" }
+              }
+            }
+          }
+        },
+        "shape": {
+          "type": "object",
+          "required": ["primary", "defining_feature", "plain_description"],
+          "properties": {
+            "primary": { "$ref": "#/definitions/Claim" },
+            "secondary": { "$ref": "#/definitions/Claim" },
+            "defining_feature": { "type": "string" },
+            "plain_description": { "type": "string" }
+          }
+        },
+        "color": {
+          "type": "object",
+          "required": ["undertone", "contrast", "season_direction", "wearable_notes", "lighting_caveat"],
+          "properties": {
+            "undertone": { "$ref": "#/definitions/Claim" },
+            "contrast": { "$ref": "#/definitions/Claim" },
+            "season_direction": { "$ref": "#/definitions/Claim" },
+            "wearable_notes": { "type": "array", "items": { "type": "string" } },
+            "lighting_caveat": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "Recommendations": {
+      "type": "object",
+      "required": ["goals", "focal_point", "fit_map"],
+      "properties": {
+        "goals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["goal", "principle_id", "mechanism", "leverage"],
+            "properties": {
+              "goal": { "type": "string" },
+              "principle_id": { "type": "string" },
+              "mechanism": { "type": "string" },
+              "leverage": { "enum": ["high", "med", "low"] },
+              "rationale": { "type": "string" }
+            }
+          }
+        },
+        "focal_point": { "type": "object" },
+        "line_strategy": { "type": "object" },
+        "fit_map": {
+          "type": "object",
+          "required": ["upper", "waist", "lower"],
+          "properties": {
+            "upper": { "type": "string" },
+            "waist": { "type": "string" },
+            "lower": { "type": "string" }
+          }
+        },
+        "necklines": { "type": "array" },
+        "rises": { "type": "array" },
+        "hemlines": { "type": "array" },
+        "color_moves": { "type": "object" },
+        "archetypes": { "type": "array" },
+        "preference_reconciliation": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "TrendNotes": {
+      "type": "object",
+      "required": ["looks"],
+      "properties": {
+        "looks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["look", "verdict", "adjustment"],
+            "properties": {
+              "look": { "type": "string" },
+              "verdict": { "enum": ["cooperate", "tweak", "reconsider"] },
+              "adjustment": { "type": "string" },
+              "portable_rule": { "type": "string" },
+              "principle_id": { "type": "string" },
+              "confidence": { "enum": ["high", "medium", "low"] }
+            }
+          }
+        },
+        "myths_busted": { "type": "array" }
+      }
+    }
+  }
+}
