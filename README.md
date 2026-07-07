@@ -1,10 +1,14 @@
 # 👗 3-Photo Style Analysis — an agentic workflow
 
-A design for a **casual, for-fun** style analysis: give it **3 photos of the same
-person**, and a small team of specialized AI "personas" reads proportions, body
+A **casual, for-fun** style analysis you run inside Claude Code: give it **3 photos of
+the same person**, and a small team of specialized AI "personas" reads proportions, body
 shape, and coloring, then hands back a short, warm breakdown — *"try these styles,
 lean into these principles, and here's how to tweak that trend so it actually fits
 you."*
+
+It ships as a **runnable skill** plus the persona briefs, schemas, and research that
+ground it — not a standalone program. The "runtime" is Claude itself interpreting the
+skill; see [How to run it](#how-to-run-it).
 
 It is **food for thought, not a verdict.** No "flaws," no rules you must obey — just
 grounded ideas to play with. Your eye is always the real authority.
@@ -21,6 +25,7 @@ grounded ideas to play with. Your eye is always the real authority.
 | [`personas/`](personas) | One ready-to-use brief per agent (1–4): role, method, output contract, guardrails. |
 | [`schemas/`](schemas) | Structured handoff contracts between agents ([`.md`](schemas/handoffs.md) + [`.json`](schemas/handoffs.json)). |
 | [`.claude/skills/style-analysis/`](.claude/skills/style-analysis/SKILL.md) | **The runnable skill** — the orchestration runbook you actually invoke. |
+| [`images/`](images/) | Local **drop zone** for your 3 photos — git-ignored, so pictures are never committed. |
 
 ## How it works, in one picture
 
@@ -57,20 +62,26 @@ handoff) — not a separate agent.
 
 ## How to run it
 
-**In a Claude Code session (easiest):**
-1. Provide **3 photos** of the same person (best: full-body front, side, and a back/¾ or
+This runs **inside Claude Code** (CLI or IDE) — that's the runtime that reads the skill
+and persona briefs. There's **no standalone CLI**; `git clone` alone won't "run" it.
+
+1. Open this repo in Claude Code (installed + authenticated).
+2. Provide **3 photos** of the same person (best: full-body front, side, and a back/¾ or
    clear face shot) — drop them in [`images/`](images/) (git-ignored) to use the stronger
    file-based vision path, or paste them into chat. Add optional context in your message —
    goals, occasions, likes, or "skip the gendered labels."
-2. Invoke the **`style-analysis`** skill (e.g. `/style-analysis`), or just say
+3. Invoke the **`style-analysis`** skill (e.g. `/style-analysis`), or just say
    *"run the style analysis on these."*
-3. The orchestrator runs the pre-flight, does the Analyst read on your photos, spawns the
+4. The orchestrator runs the pre-flight, does the Analyst read on your photos, spawns the
    Stylist + Skeptic, and returns the Editor's short breakdown.
 
 **Under the hood** the personas and schemas are model-agnostic prompt units: the 3 photos
 + context go to the Analyst → `StyleProfile` → Stylist & Skeptic (independent) →
 `Recommendations` + `TrendNotes` → Editor → the final breakdown. Each handoff is validated
 against `schemas/`. See [`.claude/skills/style-analysis/SKILL.md`](.claude/skills/style-analysis/SKILL.md).
+
+> Want a true `python run.py ./images` that hits the Claude API directly, with no Claude
+> Code needed? That standalone runner isn't built yet — it can be added on request.
 
 > 🔒 **Privacy — local-only images.** Your photos are handled **locally only**: never
 > uploaded, transmitted to third-party services, stored remotely, embedded in artifacts,
