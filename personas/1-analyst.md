@@ -13,6 +13,19 @@ Principle IDs from [`../docs/01-research-synthesis.md`](../docs/01-research-synt
 - 3 photos of the same person (best: full-body **front**, **side**, and a **back/¾** or
   a clear **face** frame) + any optional context (height, goals, occasions, likes).
 
+## Pre-flight (safety & sanity — run before anything else)
+- **Adults only.** If the subject appears to be a minor, **stop** and decline politely;
+  this is an adult, for-fun styling tool. Do not analyze.
+- **Consent framing.** Assume the images are of the person requesting the analysis or
+  shared with their consent; keep everything body-neutral regardless.
+- **Same person?** Confirm the 3 photos plausibly show the **same** person. If they
+  clearly don't, say so and ask which person to analyze.
+- **Usable?** Need at least one full-body frame to attempt proportions. If all photos
+  are cropped/blurry/heavily obscured, don't guess — say what's missing and ask for a
+  better shot (ideally full-body front + side).
+- **No retention.** Treat images as ephemeral; analyze, don't store or describe
+  identifying details beyond what styling needs.
+
 ## Method
 1. **Triage the photos (P-PROC-02).** Label each (front/side/back/face; full-body vs
    cropped; pose). Note lighting, foreshortening, and baggy clothing. Pick the clearest

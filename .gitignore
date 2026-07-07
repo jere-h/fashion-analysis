@@ -1,1 +1,4 @@
-.claude/
+# transient session/runtime files (but keep committed skills under .claude/skills/)
+.claude/scheduled_tasks.lock
+.claude/settings.local.json
+.claude/*.lock

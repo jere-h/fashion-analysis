@@ -79,6 +79,27 @@ the Analyst's job, and orchestration is plain pipeline logic, not a character.
 A pipeline this short needs no separate orchestrator persona — the runner just invokes
 the four in order, validating each handoff against [`/schemas`](../schemas).
 
+### Runtime note — who sees the images
+Only the **Analyst** needs vision. When photos are pasted into a chat session, they're
+visible only to the **orchestrating (main) agent's context**, not to freshly spawned
+subagents (which receive text prompts). So at runtime:
+- The **Analyst** step runs in whichever context can actually see the images — normally
+  the orchestrator itself. (If the images exist as files on disk, the Analyst *may* run
+  as a subagent that `Read`s those paths.)
+- The **Stylist**, **Skeptic**, and **Editor** are text-only and can run as independent
+  subagents — worth doing for the Skeptic especially, so its critique isn't anchored to
+  the Stylist's reasoning. Each reads its persona brief + the principle library and
+  receives the upstream JSON.
+
+### Safety & scope (pre-flight, enforced by the Analyst)
+- **Adults only** — decline if the subject appears to be a minor.
+- **Same-person check** — confirm the 3 photos show the same person; else ask.
+- **Usable photos** — need ≥1 full-body frame; if not, ask for a better shot instead of
+  guessing.
+- **Ephemeral** — treat images as for-the-moment analysis, not stored data.
+- **Not professional advice** — entertainment only; never medical, fitness, or
+  weight-related.
+
 ---
 
 ## 4. Orchestration contract

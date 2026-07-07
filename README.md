@@ -20,6 +20,7 @@ grounded ideas to play with. Your eye is always the real authority.
 | [`docs/03-output-template.md`](docs/03-output-template.md) | The final breakdown format the user actually reads, with a worked example. |
 | [`personas/`](personas) | One ready-to-use brief per agent (1–4): role, method, output contract, guardrails. |
 | [`schemas/`](schemas) | Structured handoff contracts between agents ([`.md`](schemas/handoffs.md) + [`.json`](schemas/handoffs.json)). |
+| [`.claude/skills/style-analysis/`](.claude/skills/style-analysis/SKILL.md) | **The runnable skill** — the orchestration runbook you actually invoke. |
 
 ## How it works, in one picture
 
@@ -54,12 +55,21 @@ handoff) — not a separate agent.
 - **Body-neutral and inclusive.** Works across genders and body types; no "problem
   areas," no flattery-as-obligation. Stated preferences always beat the rulebook.
 
-## How to run it (conceptually)
+## How to run it
 
-The personas and schemas are model-agnostic prompt units. To execute:
-feed the 3 photos + optional context to the Analyst, then pass its `StyleProfile` to
-the Stylist and Skeptic, validating each structured handoff against `schemas/`, and
-pass all three outputs to the Editor for the final breakdown.
+**In a Claude Code session (easiest):**
+1. Upload / paste **3 photos** of the same person (best: full-body front, side, and a
+   back/¾ or clear face shot). Add optional context in your message — goals, occasions,
+   likes, or "skip the gendered labels."
+2. Invoke the **`style-analysis`** skill (e.g. `/style-analysis`), or just say
+   *"run the style analysis on these."*
+3. The orchestrator runs the pre-flight, does the Analyst read on your photos, spawns the
+   Stylist + Skeptic, and returns the Editor's short breakdown.
+
+**Under the hood** the personas and schemas are model-agnostic prompt units: the 3 photos
++ context go to the Analyst → `StyleProfile` → Stylist & Skeptic (independent) →
+`Recommendations` + `TrendNotes` → Editor → the final breakdown. Each handoff is validated
+against `schemas/`. See [`.claude/skills/style-analysis/SKILL.md`](.claude/skills/style-analysis/SKILL.md).
 
 > ⚠️ **Scope & disclaimer.** This is entertainment, not professional image
 > consulting, medical, or fitness advice. It reasons about *clothes and proportion*,
